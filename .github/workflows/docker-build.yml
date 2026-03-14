@@ -57,10 +57,10 @@ jobs:
           build-args: |
             WEBCODE_VERSION=${{ github.sha }}
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/webcode_base:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/webcode_base:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/webcode_base:latest
-            ghcr.io/${{ github.repository_owner }}/webcode_base:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_base:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_base:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/webclaw_base:latest
+            ghcr.io/${{ github.repository_owner }}/webclaw_base:${{ github.sha }}
           labels: |
             org.opencontainers.image.title=webcode-base-theia
             org.opencontainers.image.description=Base image with Theia IDE and Supervisor

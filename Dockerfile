@@ -3,7 +3,7 @@
 #  on top of the base image
 # ─────────────────────────────────────────────────────────────
 ARG THEIA_BASE_VERSION=latest
-FROM land007/webcode_base:${THEIA_BASE_VERSION}
+FROM land007/webclaw_base:${THEIA_BASE_VERSION}
 
 LABEL org.opencontainers.image.title="webclaw" \
       org.opencontainers.image.description="OpenClaw by WebClaw with editor, optional desktop, and isolated runtime" \
