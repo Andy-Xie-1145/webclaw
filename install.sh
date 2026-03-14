@@ -3,7 +3,7 @@ set -e
 
 #############################################
 # WebClaw One-Command Installer
-# https://github.com/land007/webcode
+# https://github.com/land007/webclaw
 #############################################
 
 # Colors
@@ -15,11 +15,11 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Configuration
-REPO_URL="https://github.com/land007/webcode"
-REPO_URL_MIRROR="https://ghproxy.com/https://github.com/land007/webcode"
-DOCKER_COMPOSE_URL="https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
-DOCKER_COMPOSE_URL_MIRROR="https://ghproxy.com/https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
-INSTALLER_URL="https://raw.githubusercontent.com/land007/webcode/main/install.sh"
+REPO_URL="https://github.com/land007/webclaw"
+REPO_URL_MIRROR="https://ghproxy.com/https://github.com/land007/webclaw"
+DOCKER_COMPOSE_URL="https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml"
+DOCKER_COMPOSE_URL_MIRROR="https://ghproxy.com/https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml"
+INSTALLER_URL="https://raw.githubusercontent.com/land007/webclaw/main/install.sh"
 INSTALL_DIR="$HOME/webclaw"
 
 # Detect if we need sudo for docker

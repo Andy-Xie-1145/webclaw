@@ -1,12 +1,12 @@
 FROM ubuntu:24.04
 
-LABEL org.opencontainers.image.title="webcode-base" \
+LABEL org.opencontainers.image.title="webclaw-base" \
       org.opencontainers.image.description="Base image with code-server IDE and Supervisor (no desktop components)" \
-      org.opencontainers.image.url="https://github.com/land007/webcode" \
-      org.opencontainers.image.source="https://github.com/land007/webcode" \
+      org.opencontainers.image.url="https://github.com/land007/webclaw" \
+      org.opencontainers.image.source="https://github.com/land007/webclaw" \
       org.opencontainers.image.vendor="land007" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.logo="https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/icon-source.png"
+      org.opencontainers.image.logo="https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/icon-source.png"
 
 # Build-time version argument
 ARG WEBCODE_VERSION=dev
@@ -94,5 +94,5 @@ LABEL org.opencontainers.image.version="${WEBCODE_VERSION:-dev}" \
 # Set default working directory
 WORKDIR /home/ubuntu
 
-#docker build -f Dockerfile.base -t land007/webcode_base:latest .
+#docker build -f Dockerfile.base -t land007/webclaw_base:latest .
 # Trigger rebuild 2025-03-05

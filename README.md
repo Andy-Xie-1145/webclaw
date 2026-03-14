@@ -1,22 +1,22 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/icon-source.png" width="120" alt="WebClaw">
+  <img src="https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/icon-source.png" width="120" alt="WebClaw">
 </p>
 
 # OpenClaw by WebClaw
 
-![GitHub Stars](https://img.shields.io/github/stars/land007/webcode?style=social)
+![GitHub Stars](https://img.shields.io/github/stars/land007/webclaw?style=social)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Docker Pulls](https://img.shields.io/docker/pulls/land007/webclaw)
 ![Platforms](https://img.shields.io/badge/platform-amd64%20%7C%20arm64-blue)
 
 **🌐 [Official Website](https://webcode.qhkly.com)** — Documentation, guides, and downloads
 
-[📦 Repository](https://github.com/land007/webcode) |
+[📦 Repository](https://github.com/land007/webclaw) |
 [🚀 Launcher](https://github.com/land007/webcode-launcher) |
 [🌐 Website](https://webcode.qhkly.com) |
 [🐳 Default Image](https://hub.docker.com/r/land007/webclaw) |
 [🧰 Full Image](https://hub.docker.com/r/land007/webclaw_full) |
-[🐛 Issues](https://github.com/land007/webcode/issues)
+[🐛 Issues](https://github.com/land007/webclaw/issues)
 
 > **Two editions available:**
 > - **[webclaw](https://hub.docker.com/r/land007/webclaw)** — Default image for OpenClaw-first usage
@@ -81,7 +81,7 @@ No Git or Node.js needed. Just Docker Desktop + a download.
 
 **Step 2 — Download the WebClaw launcher app:**
 
-Visit **[webcode.qhkly.com](https://webcode.qhkly.com)** to download the launcher app for your platform, or download from the [**Releases page**](https://github.com/land007/webcode/releases/latest):
+Visit **[webcode.qhkly.com](https://webcode.qhkly.com)** to download the launcher app for your platform, or download from the [**Releases page**](https://github.com/land007/webclaw/releases/latest):
 
 | Platform | File to download |
 |----------|-----------------|
@@ -104,12 +104,12 @@ The app will guide you through setup with a step-by-step wizard.
 
 **macOS / Linux**:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/land007/webcode/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/land007/webclaw/main/install.sh | bash
 ```
 
 **Windows** (PowerShell — **Run as Administrator**):
 ```powershell
-irm https://raw.githubusercontent.com/land007/webcode/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/land007/webclaw/main/install.ps1 | iex
 ```
 
 ---
@@ -135,7 +135,7 @@ Then open **http://localhost:20000** — log in with `admin` / `changeme`, click
 **macOS / Linux / WSL / Git Bash:**
 ```bash
 mkdir -p ~/webcode && cd ~/webcode
-curl -fsSL https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml -o docker-compose.yml
+curl -fsSL https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml -o docker-compose.yml
 docker compose up -d
 ```
 
@@ -176,7 +176,7 @@ docker run -d \
 ```powershell
 New-Item -ItemType Directory -Force "$env:USERPROFILE\webcode"
 Set-Location "$env:USERPROFILE\webcode"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml" -OutFile docker-compose.yml
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml" -OutFile docker-compose.yml
 docker compose up -d
 ```
 
@@ -272,7 +272,7 @@ The fastest way to build is using the pre-built base image from Docker Hub:
 
 ```bash
 # Pull or ensure base image exists (first time only)
-docker pull land007/webcode:base-theia-latest
+docker pull land007/webclaw_base:latest
 
 # Build full version (30-60 seconds, using cached base)
 docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=latest .
@@ -292,7 +292,7 @@ Build everything from scratch, including the base Theia image:
 
 ```bash
 # Clone repository
-git clone https://github.com/land007/webcode.git && cd webcode
+git clone https://github.com/land007/webclaw.git && cd webclaw
 
 # Step 1: Build base image (10-12 minutes, slowest step)
 docker build -f Dockerfile.base -t webcode:base-theia-local .
@@ -314,7 +314,7 @@ For production deployment to Docker Hub:
 # Build base image for both architectures
 docker buildx build --platform linux/amd64,linux/arm64 \
   -f Dockerfile.base \
-  -t land007/webcode:base-theia-latest \
+  -t land007/webclaw_base:latest \
   --push .
 
 # Build full version
@@ -413,7 +413,7 @@ Follow the prompts, then refresh http://localhost:20003.
 # webcode（中文文档）
 
 **提供两个版本：**
-- **[webcode](https://hub.docker.com/r/land007/webcode)** — 完整版（~3GB），含 GNOME 桌面、VNC、中文输入
+- **[webclaw](https://hub.docker.com/r/land007/webclaw)** — 默认版，适合 OpenClaw-first 使用
 - **[webclaw_full](https://hub.docker.com/r/land007/webclaw_full)** — 完整版，包含额外高级工具
 
 基于 Docker 的浏览器可访问开发环境，内置 **Theia IDE**、**Vibe Kanban**、**noVNC 桌面**和 **OpenClaw AI**。
@@ -473,7 +473,7 @@ Follow the prompts, then refresh http://localhost:20003.
 
 **第二步 — 下载 WebClaw 启动器应用**：
 
-访问 **[webcode.qhkly.com](https://webcode.qhkly.com)** 下载启动器应用，或前往 [**Releases 页面**](https://github.com/land007/webcode/releases/latest)：
+访问 **[webcode.qhkly.com](https://webcode.qhkly.com)** 下载启动器应用，或前往 [**Releases 页面**](https://github.com/land007/webclaw/releases/latest)：
 
 | 平台 | 下载文件 |
 |------|---------|
@@ -496,12 +496,12 @@ Follow the prompts, then refresh http://localhost:20003.
 
 **macOS / Linux**：
 ```bash
-curl -fsSL https://raw.githubusercontent.com/land007/webcode/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/land007/webclaw/main/install.sh | bash
 ```
 
 **Windows**（PowerShell — **需以管理员身份运行**）：
 ```powershell
-irm https://raw.githubusercontent.com/land007/webcode/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/land007/webclaw/main/install.ps1 | iex
 ```
 
 ---
@@ -527,7 +527,7 @@ docker run -d --name webclaw -p 20000-20004:20000-20004 -p 20005:10005 \
 **macOS / Linux / WSL / Git Bash：**
 ```bash
 mkdir -p ~/webcode && cd ~/webcode
-curl -fsSL https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml -o docker-compose.yml
+curl -fsSL https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml -o docker-compose.yml
 docker compose up -d
 ```
 
@@ -568,7 +568,7 @@ docker run -d \
 ```powershell
 New-Item -ItemType Directory -Force "$env:USERPROFILE\webcode"
 Set-Location "$env:USERPROFILE\webcode"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml" -OutFile docker-compose.yml
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml" -OutFile docker-compose.yml
 docker compose up -d
 ```
 
@@ -660,7 +660,7 @@ docker compose up -d
 
 ```bash
 # 拉取或确保基础镜像存在（首次运行）
-docker pull land007/webcode:base-theia-latest
+docker pull land007/webclaw_base:latest
 
 # 构建完整版（30-60 秒，使用缓存的基础镜像）
 docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=latest .
@@ -680,7 +680,7 @@ docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=latest --build-arg
 
 ```bash
 # 克隆仓库
-git clone https://github.com/land007/webcode.git && cd webcode
+git clone https://github.com/land007/webclaw.git && cd webclaw
 
 # 步骤 1：构建基础镜像（10-12 分钟，最慢的步骤）
 docker build -f Dockerfile.base -t webcode:base-theia-local .
@@ -702,7 +702,7 @@ docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=local --build-arg 
 # 构建基础镜像（两种架构）
 docker buildx build --platform linux/amd64,linux/arm64 \
   -f Dockerfile.base \
-  -t land007/webcode:base-theia-latest \
+  -t land007/webclaw_base:latest \
   --push .
 
 # 构建完整版
@@ -726,7 +726,7 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 
 ```bash
 # 克隆仓库
-git clone https://github.com/land007/webcode.git && cd webcode
+git clone https://github.com/land007/webclaw.git && cd webclaw
 
 # 本地构建（单架构）
 docker build --build-arg INSTALL_DESKTOP=false -t webclaw:latest .

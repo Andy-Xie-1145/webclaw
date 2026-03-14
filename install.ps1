@@ -1,5 +1,5 @@
 # WebClaw One-Command Installer for Windows
-# https://github.com/land007/webcode
+# https://github.com/land007/webclaw
 
 # Allow scripts (like npm.ps1) to run in this process only
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
@@ -20,10 +20,10 @@ function Get-Color {
 }
 
 # Configuration
-$RepoUrl = "https://github.com/land007/webcode"
-$RepoUrlMirror = "https://ghproxy.com/https://github.com/land007/webcode"
-$DockerComposeUrl = "https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
-$DockerComposeUrlMirror = "https://ghproxy.com/https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
+$RepoUrl = "https://github.com/land007/webclaw"
+$RepoUrlMirror = "https://ghproxy.com/https://github.com/land007/webclaw"
+$DockerComposeUrl = "https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml"
+$DockerComposeUrlMirror = "https://ghproxy.com/https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/docker-compose.yml"
 $InstallDir = "$env:USERPROFILE\webclaw"
 
 #############################################
@@ -127,7 +127,7 @@ function Install-NodeJS {
         Print-Error "Administrator privileges required for installation"
         Write-Host ""
         Print-Info "Please restart PowerShell as Administrator and run:"
-        Write-Host "  irm https://raw.githubusercontent.com/land007/webcode/main/install.ps1 | iex" -ForegroundColor Cyan
+        Write-Host "  irm https://raw.githubusercontent.com/land007/webclaw/main/install.ps1 | iex" -ForegroundColor Cyan
         Write-Host ""
         return $false
     }
