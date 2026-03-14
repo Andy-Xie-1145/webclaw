@@ -50,8 +50,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends python3-setuptools \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ─── 2b. webcode-dashboard-server (includes http-proxy as dependency) ─
-RUN npm install -g webcode-dashboard-server@1.4.0
+# ─── 2b. webclaw-dashboard-server (includes http-proxy as dependency) ─
+RUN npm install -g webclaw-dashboard-server@1.4.2
 
 # ─── 4. code-server (pre-compiled binary — replaces Theia build) ────
 ARG CODE_SERVER_VERSION=4.100.2
