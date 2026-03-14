@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/land007/webclaw/main/launcher/assets/icon-source.png" width="120" alt="WebClaw">
+  <img src="https://raw.githubusercontent.com/land007/webclaw/main/images/icon-source.png" width="120" alt="WebClaw">
 </p>
 
 # OpenClaw by WebClaw

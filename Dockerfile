@@ -11,7 +11,7 @@ LABEL org.opencontainers.image.title="webclaw" \
       org.opencontainers.image.source="https://github.com/land007/webcode" \
       org.opencontainers.image.vendor="land007" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.logo="https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/icon-source.png" \
+      org.opencontainers.image.logo="https://raw.githubusercontent.com/land007/webclaw/main/images/icon-source.png" \
       org.opencontainers.image.version="${WEBCODE_VERSION:-dev}"
 
 # Build-time flags (inherited from base, but can override)
