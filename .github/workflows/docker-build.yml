@@ -161,7 +161,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push webcode_full image
+      - name: Build and push webclaw_full image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -171,10 +171,10 @@ jobs:
           build-args: |
             BASE_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/webcode:${{ github.sha }}
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/webcode_full:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/webcode_full:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/webcode_full:latest
-            ghcr.io/${{ github.repository_owner }}/webcode_full:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/webclaw_full:latest
+            ghcr.io/${{ github.repository_owner }}/webclaw_full:${{ github.sha }}
           labels: |
             org.opencontainers.image.description=Full image with 4 AI CLIs (Claude + Gemini + Codex + Cursor)
           cache-from: type=gha
@@ -211,7 +211,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate openclaw README
         run: |
-          sed 's|land007/webcode_lite|land007/openclaw_lite|g; s|land007/webcode|land007/openclaw|g' README.md > README-openclaw.md
+          sed 's|land007/webclaw_lite|land007/openclaw_lite|g; s|land007/webcode|land007/openclaw|g' README.md > README-openclaw.md
       - uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -253,8 +253,8 @@ jobs:
         id: meta-lite
         with:
           images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/webcode_lite
-            ghcr.io/${{ github.repository_owner }}/webcode_lite
+            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite
+            ghcr.io/${{ github.repository_owner }}/webclaw_lite
             ${{ secrets.DOCKERHUB_USERNAME }}/openclaw_lite
             ghcr.io/${{ github.repository_owner }}/openclaw_lite
           tags: |
@@ -296,7 +296,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/webcode_lite
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite
           readme-filepath: ./README.md
 
   # ─────────────────────────────────────────────────────────────
@@ -312,7 +312,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generate openclaw_lite README
         run: |
-          sed 's|land007/webcode_lite|land007/openclaw_lite|g; s|land007/webcode|land007/openclaw|g' README.md > README-openclaw-lite.md
+          sed 's|land007/webclaw_lite|land007/openclaw_lite|g; s|land007/webcode|land007/openclaw|g' README.md > README-openclaw-lite.md
       - uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
