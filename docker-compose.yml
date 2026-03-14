@@ -1,8 +1,8 @@
 services:
-  webcode:
-    image: land007/webcode:latest
+  webclaw:
+    image: land007/webclaw:latest
     build: .
-    container_name: webcode
+    container_name: webclaw
     ports:
       - "20000:20000"  # Dashboard (四合一入口，via Caddy)
       - "20001:20001"  # Theia IDE (via Caddy)
@@ -11,6 +11,7 @@ services:
       - "20004:20004"  # noVNC (via Caddy) + Audio WebSocket (/audio path)
       - "20005:10005"  # TigerVNC (direct connection)
       - "20007:10007"  # claudecodeui (via Caddy)
+      - "20008:10008"  # ttyd 轻量网页终端
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - dna-data:/home/ubuntu/dna          # DNA 目录：项目源码，空时自动 clone
@@ -39,9 +40,9 @@ services:
       - GIT_USER_NAME=${GIT_USER_NAME:-}
       - GIT_USER_EMAIL=${GIT_USER_EMAIL:-}
       - DNA_REPO_URL=${DNA_REPO_URL:-https://github.com/land007/webcode}
-      - ENABLE_KANBAN=${ENABLE_KANBAN:-true}
+      - ENABLE_KANBAN=${ENABLE_KANBAN:-false}
       - ENABLE_OPENCLAW=${ENABLE_OPENCLAW:-true}
-      - ENABLE_CLAUDECODEUI=${ENABLE_CLAUDECODEUI:-true}
+      - ENABLE_CLAUDECODEUI=${ENABLE_CLAUDECODEUI:-false}
       - HOST_API_TOKEN=${HOST_API_TOKEN:-webcode-host-token-change-me}
     extra_hosts:
       - "host.docker.internal:host-gateway"

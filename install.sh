@@ -2,7 +2,7 @@
 set -e
 
 #############################################
-# webcode One-Command Installer
+# WebClaw One-Command Installer
 # https://github.com/land007/webcode
 #############################################
 
@@ -20,7 +20,7 @@ REPO_URL_MIRROR="https://ghproxy.com/https://github.com/land007/webcode"
 DOCKER_COMPOSE_URL="https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
 DOCKER_COMPOSE_URL_MIRROR="https://ghproxy.com/https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
 INSTALLER_URL="https://raw.githubusercontent.com/land007/webcode/main/install.sh"
-INSTALL_DIR="$HOME/webcode"
+INSTALL_DIR="$HOME/webclaw"
 
 # Detect if we need sudo for docker
 DOCKER_CMD="docker"
@@ -48,7 +48,7 @@ print_logo() {
 / /_/  __/ /_/ / /    / /_/ /_/ / /_/ / / /_/ /
 \__/\___/\__,_/_/     \__/\____/\____/_/\__,_/
 
-One-command browser-based dev environment installer
+One-command OpenClaw by WebClaw installer
 EOF
     printf "\n"
 }
@@ -236,7 +236,7 @@ check_prerequisites() {
 }
 
 install_docker_mode() {
-    print_header "Installing webcode (Docker mode)..."
+    print_header "Installing WebClaw (Docker mode)..."
 
     # Create install directory
     mkdir -p "$INSTALL_DIR"
@@ -301,7 +301,7 @@ EOF
 }
 
 install_launcher_mode() {
-    print_header "Installing webcode (Launcher mode)..."
+    print_header "Installing WebClaw (Launcher mode)..."
 
     # Check for git
     if ! command -v git &> /dev/null; then
@@ -363,7 +363,7 @@ install_launcher_mode() {
     # Start Launcher
     printf "\n"
     print_success "Installation complete!"
-    print_header "Starting Launcher..."
+    print_header "Starting WebClaw Launcher..."
     print_info "A GUI window will appear where you can configure and start webcode."
     printf "\n"
     print_info "To restart later: cd $INSTALL_DIR/launcher && npm start"
@@ -397,7 +397,7 @@ print_completion_info() {
     printf "\n"
     print_header "Documentation:"
     print_info "GitHub:  $REPO_URL"
-    print_info "Docker:  https://hub.docker.com/r/land007/webcode"
+    print_info "Docker:  https://hub.docker.com/r/land007/webclaw"
     printf "\n"
 }
 

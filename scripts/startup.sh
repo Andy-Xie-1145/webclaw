@@ -158,7 +158,7 @@ fi
 
 # ─── Background tool upgrades (non-blocking) ─────────────────────────
 # Upgrade openclaw in system Node global (takes effect after supervisord restart)
-nohup npm install -g openclaw@2026.2.22 >> /tmp/npm-upgrade.log 2>&1 &
+nohup npm install -g openclaw@2026.3.8 >> /tmp/npm-upgrade.log 2>&1 &
 # Upgrade claude-code for ubuntu user via nvm
 su -l ubuntu -c \
     'source ~/.nvm/nvm.sh 2>/dev/null && npm install -g @anthropic-ai/claude-code@latest >> /tmp/claude-upgrade.log 2>&1' &

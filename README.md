@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/icon-source.png" width="120" alt="webcode">
+  <img src="https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/icon-source.png" width="120" alt="WebClaw">
 </p>
 
-# webcode
+# OpenClaw by WebClaw
 
 ![GitHub Stars](https://img.shields.io/github/stars/land007/webcode?style=social)
 ![License](https://img.shields.io/badge/license-MIT-blue)
-![Docker Pulls](https://img.shields.io/docker/pulls/land007/webcode)
+![Docker Pulls](https://img.shields.io/docker/pulls/land007/webclaw)
 ![Platforms](https://img.shields.io/badge/platform-amd64%20%7C%20arm64-blue)
 
 **🌐 [Official Website](https://webcode.qhkly.com)** — Documentation, guides, and downloads
@@ -14,15 +14,17 @@
 [📦 Repository](https://github.com/land007/webcode) |
 [🚀 Launcher](https://github.com/land007/webcode-launcher) |
 [🌐 Website](https://webcode.qhkly.com) |
-[🐳 Full Version](https://hub.docker.com/r/land007/webcode) (~3GB) |
-[⚡ Lite Version](https://hub.docker.com/r/land007/webcode_lite) (~1.5GB) |
+[🐳 Default Image](https://hub.docker.com/r/land007/webclaw) |
+[🧰 Full Image](https://hub.docker.com/r/land007/webclaw_full) |
 [🐛 Issues](https://github.com/land007/webcode/issues)
 
 > **Two editions available:**
-> - **[webcode](https://hub.docker.com/r/land007/webcode)** — Full version with GNOME desktop, VNC, Chinese input
-> - **[webcode_lite](https://hub.docker.com/r/land007/webcode_lite)** — Lite version (50% smaller) for lightweight development
+> - **[webclaw](https://hub.docker.com/r/land007/webclaw)** — Default image for OpenClaw-first usage
+> - **[webclaw_full](https://hub.docker.com/r/land007/webclaw_full)** — Full image with extra advanced tools
 
-A Docker-based browser-accessible development environment with **Theia IDE**, **Vibe Kanban**, **noVNC Desktop**, and **OpenClaw AI**.
+An OpenClaw-first runtime and launcher stack for users who want a simpler way to install and run OpenClaw.
+
+**Migration note:** naming is currently in transition. See [WEBCLAW_MIGRATION_PLAN.md](../WEBCLAW_MIGRATION_PLAN.md) for the official mapping between `webcode`, `WebClaw`, and the new image names.
 
 ---
 
@@ -49,7 +51,7 @@ A Docker-based browser-accessible development environment with **Theia IDE**, **
 
 ## 📊 Comparison
 
-| | webcode | Local VS Code | GitPod / Codespaces |
+| | WebClaw | Manual Install | Generic Docker Guides |
 |---|---|---|---|
 | **Setup Time** | ~1 min | 30+ min | Instant |
 | **Isolation** | ✅ Full container | ❌ Host system | ✅ Container |
@@ -77,22 +79,22 @@ No Git or Node.js needed. Just Docker Desktop + a download.
 | Windows | [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/) |
 | Linux | [Docker Engine](https://docs.docker.com/engine/install/) |
 
-**Step 2 — Download the webcode Launcher app:**
+**Step 2 — Download the WebClaw launcher app:**
 
 Visit **[webcode.qhkly.com](https://webcode.qhkly.com)** to download the launcher app for your platform, or download from the [**Releases page**](https://github.com/land007/webcode/releases/latest):
 
 | Platform | File to download |
 |----------|-----------------|
-| macOS (Apple Silicon / M1+) | `webcode-launcher-osx-arm64-*.zip` |
-| macOS (Intel) | `webcode-launcher-osx-x64-*.zip` |
-| Windows | `webcode-launcher-win-x64-*.zip` |
-| Linux | `webcode-launcher-linux-x64-*.zip` |
+| macOS (Apple Silicon / M1+) | `webclaw-launcher-osx-arm64-*.zip` |
+| macOS (Intel) | `webclaw-launcher-osx-x64-*.zip` |
+| Windows | `webclaw-launcher-win-x64-*.zip` |
+| Linux | `webclaw-launcher-linux-x64-*.zip` |
 
 **Step 3 — Unzip and run:**
 
-- **macOS**: Unzip → right-click `webcode.app` → **Open** (required first time to bypass Gatekeeper)
-- **Windows**: Unzip → double-click `webcode.exe` → click "Run anyway" if SmartScreen appears
-- **Linux**: Unzip → run `./webcode`
+- **macOS**: Unzip → right-click `webclaw.app` → **Open** (required first time to bypass Gatekeeper)
+- **Windows**: Unzip → double-click `webclaw.exe` → click "Run anyway" if SmartScreen appears
+- **Linux**: Unzip → run `./webclaw`
 
 The app will guide you through setup with a step-by-step wizard.
 
@@ -119,11 +121,11 @@ No GUI needed. Requires [Docker](https://docs.docker.com/engine/install/).
 **Option A — Minimal one-liner (simplest) ⚡:**
 
 ```bash
-docker run -d --name webcode -p 20000-20004:20000-20004 -p 20005:10005 \
+docker run -d --name webclaw -p 20000-20004:20000-20004 -p 20005:10005 \
   --shm-size=512m --security-opt seccomp=unconfined \
   -v webcode-config:/home/ubuntu/.webcode \
   -v projects:/home/ubuntu/projects \
-  land007/webcode:latest
+  land007/webclaw:latest
 ```
 
 Then open **http://localhost:20000** — log in with `admin` / `changeme`, click ⚙ to configure passwords, tokens, and Git settings. **All configuration persists across restarts** via the `webcode-config` volume.
@@ -141,7 +143,7 @@ docker compose up -d
 
 ```bash
 docker run -d \
-  --name webcode \
+  --name webclaw \
   --restart unless-stopped \
   -p 20000:20000 \
   -p 20001:20001 \
@@ -167,7 +169,7 @@ docker run -d \
   -e VNC_RESOLUTION=1920x1080 \
   --shm-size=512m \
   --security-opt seccomp=unconfined \
-  land007/webcode:latest
+  land007/webclaw:latest
 ```
 
 **Windows PowerShell:**
@@ -273,10 +275,10 @@ The fastest way to build is using the pre-built base image from Docker Hub:
 docker pull land007/webcode:base-theia-latest
 
 # Build full version (30-60 seconds, using cached base)
-docker build -t webcode:latest --build-arg THEIA_BASE_VERSION=latest .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=latest .
 
 # Build lite version (5-10 seconds, using cached base)
-docker build -t webcode_lite:latest --build-arg THEIA_BASE_VERSION=latest --build-arg INSTALL_DESKTOP=false .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=latest --build-arg INSTALL_DESKTOP=false .
 ```
 
 **Benefits:**
@@ -296,10 +298,10 @@ git clone https://github.com/land007/webcode.git && cd webcode
 docker build -f Dockerfile.base -t webcode:base-theia-local .
 
 # Step 2a: Build full version (30-60 seconds)
-docker build -t webcode:latest --build-arg THEIA_BASE_VERSION=local .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=local .
 
 # Step 2b: OR build lite version (5-10 seconds)
-docker build -t webcode_lite:latest --build-arg THEIA_BASE_VERSION=local --build-arg INSTALL_DESKTOP=false .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=local --build-arg INSTALL_DESKTOP=false .
 ```
 
 **Image size:** ~2.5-3 GB (full) / ~1-1.5 GB (lite)
@@ -319,14 +321,14 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 docker buildx build --platform linux/amd64,linux/arm64 \
   --build-arg THEIA_BASE_VERSION=latest \
   --build-arg INSTALL_DESKTOP=true \
-  -t land007/webcode:latest \
+  -t land007/webclaw:latest \
   --push .
 
 # Build lite version
 docker buildx build --platform linux/amd64,linux/arm64 \
   --build-arg THEIA_BASE_VERSION=latest \
   --build-arg INSTALL_DESKTOP=false \
-  -t land007/webcode_lite:latest \
+  -t land007/webclaw:latest \
   --push .
 ```
 
@@ -412,7 +414,7 @@ Follow the prompts, then refresh http://localhost:20003.
 
 **提供两个版本：**
 - **[webcode](https://hub.docker.com/r/land007/webcode)** — 完整版（~3GB），含 GNOME 桌面、VNC、中文输入
-- **[webcode_lite](https://hub.docker.com/r/land007/webcode_lite)** — 精简版（~1.5GB，小 50%），轻量级开发
+- **[webclaw_full](https://hub.docker.com/r/land007/webclaw_full)** — 完整版，包含额外高级工具
 
 基于 Docker 的浏览器可访问开发环境，内置 **Theia IDE**、**Vibe Kanban**、**noVNC 桌面**和 **OpenClaw AI**。
 
@@ -469,22 +471,22 @@ Follow the prompts, then refresh http://localhost:20003.
 | Windows | [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/) |
 | Linux | [Docker Engine](https://docs.docker.com/engine/install/) |
 
-**第二步 — 下载 webcode 启动器应用**：
+**第二步 — 下载 WebClaw 启动器应用**：
 
 访问 **[webcode.qhkly.com](https://webcode.qhkly.com)** 下载启动器应用，或前往 [**Releases 页面**](https://github.com/land007/webcode/releases/latest)：
 
 | 平台 | 下载文件 |
 |------|---------|
-| macOS（Apple Silicon / M1 及以上） | `webcode-launcher-osx-arm64-*.zip` |
-| macOS（Intel 芯片） | `webcode-launcher-osx-x64-*.zip` |
-| Windows | `webcode-launcher-win-x64-*.zip` |
-| Linux | `webcode-launcher-linux-x64-*.zip` |
+| macOS（Apple Silicon / M1 及以上） | `webclaw-launcher-osx-arm64-*.zip` |
+| macOS（Intel 芯片） | `webclaw-launcher-osx-x64-*.zip` |
+| Windows | `webclaw-launcher-win-x64-*.zip` |
+| Linux | `webclaw-launcher-linux-x64-*.zip` |
 
 **第三步 — 解压并运行**：
 
-- **macOS**：解压后右键点击 `webcode.app` → 选择**打开**（首次运行需要这样操作以绕过系统安全提示）
-- **Windows**：解压后双击 `webcode.exe`，如弹出 SmartScreen 警告，点击"仍要运行"
-- **Linux**：解压后运行 `./webcode`
+- **macOS**：解压后右键点击 `webclaw.app` → 选择**打开**（首次运行需要这样操作以绕过系统安全提示）
+- **Windows**：解压后双击 `webclaw.exe`，如弹出 SmartScreen 警告，点击"仍要运行"
+- **Linux**：解压后运行 `./webclaw`
 
 应用会通过图形向导一步步引导你完成设置。
 
@@ -511,11 +513,11 @@ irm https://raw.githubusercontent.com/land007/webcode/main/install.ps1 | iex
 **选项 A — 极简一行命令（最简单）⚡：**
 
 ```bash
-docker run -d --name webcode -p 20000-20004:20000-20004 -p 20005:10005 \
+docker run -d --name webclaw -p 20000-20004:20000-20004 -p 20005:10005 \
   --shm-size=512m --security-opt seccomp=unconfined \
   -v webcode-config:/home/ubuntu/.webcode \
   -v projects:/home/ubuntu/projects \
-  land007/webcode:latest
+  land007/webclaw:latest
 ```
 
 然后浏览器打开 **http://localhost:20000**，用 `admin` / `changeme` 登录，点击右上角 ⚙ 按钮即可配置密码、Token、Git 等所有设置。**配置自动持久化**，容器重启后依然生效。
@@ -533,7 +535,7 @@ docker compose up -d
 
 ```bash
 docker run -d \
-  --name webcode \
+  --name webclaw \
   --restart unless-stopped \
   -p 20000:20000 \
   -p 20001:20001 \
@@ -559,7 +561,7 @@ docker run -d \
   -e VNC_RESOLUTION=1920x1080 \
   --shm-size=512m \
   --security-opt seccomp=unconfined \
-  land007/webcode:latest
+  land007/webclaw:latest
 ```
 
 **Windows PowerShell：**
@@ -661,10 +663,10 @@ docker compose up -d
 docker pull land007/webcode:base-theia-latest
 
 # 构建完整版（30-60 秒，使用缓存的基础镜像）
-docker build -t webcode:latest --build-arg THEIA_BASE_VERSION=latest .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=latest .
 
 # 构建精简版（5-10 秒，使用缓存的基础镜像）
-docker build -t webcode_lite:latest --build-arg THEIA_BASE_VERSION=latest --build-arg INSTALL_DESKTOP=false .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=latest --build-arg INSTALL_DESKTOP=false .
 ```
 
 **优势：**
@@ -684,10 +686,10 @@ git clone https://github.com/land007/webcode.git && cd webcode
 docker build -f Dockerfile.base -t webcode:base-theia-local .
 
 # 步骤 2a：构建完整版（30-60 秒）
-docker build -t webcode:latest --build-arg THEIA_BASE_VERSION=local .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=local .
 
 # 步骤 2b：或构建精简版（5-10 秒）
-docker build -t webcode_lite:latest --build-arg THEIA_BASE_VERSION=local --build-arg INSTALL_DESKTOP=false .
+docker build -t webclaw:latest --build-arg THEIA_BASE_VERSION=local --build-arg INSTALL_DESKTOP=false .
 ```
 
 **镜像大小：** ~2.5-3 GB（完整版） / ~1-1.5 GB（精简版）
@@ -707,14 +709,14 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 docker buildx build --platform linux/amd64,linux/arm64 \
   --build-arg THEIA_BASE_VERSION=latest \
   --build-arg INSTALL_DESKTOP=true \
-  -t land007/webcode:latest \
+  -t land007/webclaw:latest \
   --push .
 
 # 构建精简版
 docker buildx build --platform linux/amd64,linux/arm64 \
   --build-arg THEIA_BASE_VERSION=latest \
   --build-arg INSTALL_DESKTOP=false \
-  -t land007/webcode_lite:latest \
+  -t land007/webclaw:latest \
   --push .
 ```
 
@@ -727,10 +729,10 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 git clone https://github.com/land007/webcode.git && cd webcode
 
 # 本地构建（单架构）
-docker build --build-arg INSTALL_DESKTOP=false -t webcode_lite:latest .
+docker build --build-arg INSTALL_DESKTOP=false -t webclaw:latest .
 
 # 多架构构建（amd64 + arm64）
-docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,linux/arm64 -t land007/webcode_lite:latest .
+docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,linux/arm64 -t land007/webclaw:latest .
 ```
 
 **镜像大小：** ~1-1.5 GB（比完整版小 50%）

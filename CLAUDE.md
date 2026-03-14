@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**webcode** is a Docker-based browser-accessible development environment that provides:
+**WebClaw** is an OpenClaw-first Docker runtime that provides:
 - A full GNOME Flashback desktop accessible via VNC/noVNC (browser)
 - Theia IDE (browser-based VS Code-like editor) on port 10001
 - Vibe Kanban (task board) on port 10002
@@ -49,13 +49,13 @@ Default Basic Auth credentials: `admin` / `changeme` (configurable via `AUTH_USE
 
 ```bash
 # Local build (single architecture, matches your host)
-docker build -t webcode .
+docker build -t webclaw .
 
 # Multi-arch build (amd64 + arm64, matches CI)
-docker buildx build --platform linux/amd64,linux/arm64 -t land007/webcode:latest .
+docker buildx build --platform linux/amd64,linux/arm64 -t land007/webclaw:latest .
 
 # Multi-arch build with push to registry
-docker buildx build --platform linux/amd64,linux/arm64 -t land007/webcode:latest --push .
+docker buildx build --platform linux/amd64,linux/arm64 -t land007/webclaw:latest --push .
 ```
 
 **Full version includes:** GNOME desktop, VNC/noVNC, fcitx Chinese input, Chrome/Chromium browser, Theia IDE, Vibe Kanban, OpenClaw.
@@ -66,13 +66,13 @@ docker buildx build --platform linux/amd64,linux/arm64 -t land007/webcode:latest
 
 ```bash
 # Local build (single architecture)
-docker build --build-arg INSTALL_DESKTOP=false -t webcode_lite:latest .
+docker build --build-arg INSTALL_DESKTOP=false -t webclaw:latest .
 
 # Multi-arch build (amd64 + arm64)
-docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,linux/arm64 -t land007/webcode_lite:latest .
+docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,linux/arm64 -t land007/webclaw:latest .
 
 # Multi-arch build with push
-docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,linux/arm64 -t land007/webcode_lite:latest --push .
+docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,linux/arm64 -t land007/webclaw:latest --push .
 ```
 
 **Lite version includes:** Theia IDE, Vibe Kanban, OpenClaw, Dashboard proxy. **No** VNC, GNOME desktop, fcitx, or browser.
@@ -148,10 +148,10 @@ The container supports a self-evolution model where the AI inside can modify its
 vim /home/ubuntu/dna/Dockerfile
 
 # 2. Build evolved image
-docker build -t webcode-evolved /home/ubuntu/dna/
+docker build -t webclaw-evolved /home/ubuntu/dna/
 
 # 3. Spawn child robot
-docker run -d ... webcode-evolved
+docker run -d ... webclaw-evolved
 
 # 4. Contribute back
 cd /home/ubuntu/dna && git commit && git push && gh pr create

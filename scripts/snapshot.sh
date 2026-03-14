@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# WebCode Snapshot Script (Layered Backup)
+# WebClaw Snapshot Script (Layered Backup)
 #
 # Creates a complete snapshot using Docker layered storage:
-# 1. Base image (land007/webcode:latest) - backed up once per version
+# 1. Base image (land007/webclaw:latest) - backed up once per version
 # 2. Commit layer (user changes) - backed up each snapshot
 # 3. Volumes (user data) - backed up each snapshot
 #
@@ -51,7 +51,7 @@ log "Backup directory: ${BACKUP_DIR}"
 
 # Step 1: Detect base image
 log "Detecting base image..."
-CONTAINER_NAME="webcode"
+CONTAINER_NAME="webclaw"
 if ! docker inspect "${CONTAINER_NAME}" >/dev/null 2>&1; then
     error "Container '${CONTAINER_NAME}' not found"
     exit 1
@@ -60,7 +60,7 @@ fi
 BASE_IMAGE=$(docker inspect "${CONTAINER_NAME}" -f '{{.Config.Image}}')
 BASE_IMAGE_ID=$(docker inspect "${BASE_IMAGE}" -f '{{.Id}}' 2>/dev/null || echo "unknown")
 BASE_IMAGE_SHORT_ID=$(echo "${BASE_IMAGE_ID}" | cut -d: -f2 | cut -c1-12)
-BASE_IMAGE_FILE="webcode-base-${BASE_IMAGE_SHORT_ID}.tar.gz"
+BASE_IMAGE_FILE="webclaw-base-${BASE_IMAGE_SHORT_ID}.tar.gz"
 
 log "Base image: ${BASE_IMAGE}"
 log "Base image ID: ${BASE_IMAGE_SHORT_ID}"

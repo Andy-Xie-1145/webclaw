@@ -1,4 +1,4 @@
-# webcode One-Command Installer for Windows
+# WebClaw One-Command Installer for Windows
 # https://github.com/land007/webcode
 
 # Allow scripts (like npm.ps1) to run in this process only
@@ -24,7 +24,7 @@ $RepoUrl = "https://github.com/land007/webcode"
 $RepoUrlMirror = "https://ghproxy.com/https://github.com/land007/webcode"
 $DockerComposeUrl = "https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
 $DockerComposeUrlMirror = "https://ghproxy.com/https://raw.githubusercontent.com/land007/webcode/main/launcher/assets/docker-compose.yml"
-$InstallDir = "$env:USERPROFILE\webcode"
+$InstallDir = "$env:USERPROFILE\webclaw"
 
 #############################################
 # Helper Functions
@@ -38,7 +38,7 @@ function Print-Logo {
 / /_/  __/ /_/ / /    / /_/ /_/ / /_/ / / /_/ /
 \__/\___/\__,_/_/     \__/\____/\____/_/\__,_/
 
-One-command browser-based dev environment installer
+One-command OpenClaw by WebClaw installer
 "@
     Write-Host ""
 }
@@ -207,7 +207,7 @@ function Install-NodeJS {
 }
 
 function Install-DockerMode {
-    Print-Header "Installing webcode (Docker mode)..."
+    Print-Header "Installing WebClaw (Docker mode)..."
 
     # Create install directory
     if (-not (Test-Path $InstallDir)) {
@@ -282,7 +282,7 @@ VNC_PASSWORD=$vncPassword
 }
 
 function Install-LauncherMode {
-    Print-Header "Installing webcode (Launcher mode)..."
+    Print-Header "Installing WebClaw (Launcher mode)..."
 
     # Check for git
     if (-not (Test-GitInstalled)) {
@@ -380,7 +380,7 @@ function Install-LauncherMode {
     # Start Launcher
     Write-Host ""
     Print-Success "Installation complete!"
-    Print-Header "Starting Launcher..."
+    Print-Header "Starting WebClaw Launcher..."
     Print-Info "A GUI window will appear where you can configure and start webcode."
     Write-Host ""
     Print-Info "To restart later: cd $InstallDir\launcher; npm start"
@@ -432,7 +432,7 @@ function Print-CompletionInfo {
     Write-Host ""
     Print-Header "Documentation:"
     Print-Info "GitHub:  $RepoUrl"
-    Print-Info "Docker:  https://hub.docker.com/r/land007/webcode"
+    Print-Info "Docker:  https://hub.docker.com/r/land007/webclaw"
     Write-Host ""
 }
 

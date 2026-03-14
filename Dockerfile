@@ -5,8 +5,8 @@
 ARG THEIA_BASE_VERSION=latest
 FROM land007/webcode_base:${THEIA_BASE_VERSION}
 
-LABEL org.opencontainers.image.title="webcode" \
-      org.opencontainers.image.description="Browser-accessible dev environment with code-server IDE, Vibe Kanban, noVNC Desktop and OpenClaw AI" \
+LABEL org.opencontainers.image.title="webclaw" \
+      org.opencontainers.image.description="OpenClaw by WebClaw with editor, optional desktop, and isolated runtime" \
       org.opencontainers.image.url="https://github.com/land007/webcode" \
       org.opencontainers.image.source="https://github.com/land007/webcode" \
       org.opencontainers.image.vendor="land007" \
@@ -196,6 +196,7 @@ COPY configs/supervisor-vibe-kanban.conf /etc/supervisor/conf.d/supervisor-vibe-
 COPY configs/supervisor-code-server.conf /etc/supervisor/conf.d/supervisor-code-server.conf
 COPY configs/supervisor-openclaw.conf /etc/supervisor/conf.d/supervisor-openclaw.conf
 COPY configs/supervisor-claudecodeui.conf /etc/supervisor/conf.d/supervisor-claudecodeui.conf
+COPY configs/supervisor-webtty.conf /etc/supervisor/conf.d/supervisor-webtty.conf
 COPY configs/supervisor-cloudflared.conf /etc/supervisor/conf.d/supervisor-cloudflared.conf
 COPY configs/supervisor-analytics.conf /etc/supervisor/conf.d/supervisor-analytics.conf
 COPY configs/supervisor-dind.conf /etc/supervisor/conf.d/supervisor-dind.conf
@@ -212,6 +213,7 @@ COPY configs/key-remap.js /tmp/
 COPY configs/xsession /tmp/
 COPY scripts/audio-ws-server.py /tmp/
 COPY scripts/audio-ws-wrapper.sh /tmp/
+COPY scripts/start-webtty.sh /opt/start-webtty.sh
 COPY configs/desktop-shortcuts/ /tmp/desktop-shortcuts/
 COPY scripts/patch-novnc.sh /tmp/patch-novnc.sh
 RUN if [ "$INSTALL_DESKTOP" = "true" ]; then \
@@ -229,6 +231,7 @@ RUN if [ "$INSTALL_DESKTOP" = "true" ]; then \
         && cp /tmp/audio-ws-wrapper.sh /opt/ \
         && chmod +x /opt/audio-ws-server.py /opt/audio-ws-wrapper.sh; \
     fi \
+    && chmod +x /opt/start-webtty.sh \
     && rm -rf /tmp/supervisor-audio.conf /tmp/audio-player.html /tmp/audio-bar.js \
            /tmp/touch-handler.js /tmp/key-remap.js /tmp/xsession /tmp/desktop-shortcuts/ \
            /tmp/audio-ws-server.py /tmp/audio-ws-wrapper.sh \
@@ -251,7 +254,7 @@ RUN mkdir -p /home/ubuntu/.claude/skills && \
     cp -r /opt/skills/* /home/ubuntu/.claude/skills/ && \
     chown -R ubuntu:ubuntu /home/ubuntu/.claude/skills
 
-RUN echo "land007/webcode" > /.image_name && \
+RUN echo "land007/webclaw" > /.image_name && \
     echo $(date "+%Y-%m-%d_%H:%M:%S") > /.image_time
 
 # ─── Environment defaults ───────────────────────────────────────────
@@ -261,5 +264,5 @@ ENV VNC_RESOLUTION=1920x1080
 
 ENTRYPOINT ["/opt/startup.sh"]
 
-#docker build --build-arg INSTALL_DESKTOP=false -t land007/webcode_lite:latest .
-#docker build --build-arg INSTALL_DESKTOP=true -t land007/webcode:latest .
+#docker build --build-arg INSTALL_DESKTOP=false -t land007/webclaw_let:latest .
+#docker build --build-arg INSTALL_DESKTOP=true -t land007/webclaw:latest .

@@ -171,12 +171,12 @@ if [ -f "docker-compose.yml" ]; then
     cp docker-compose.yml docker-compose.yml.backup
 
     # Replace image with snapshot image
-    if sed -i.tmp 's|image: land007/webcode:.*|image: '"${COMMIT_IMAGE_NAME}"'|g' docker-compose.yml; then
+    if sed -i.tmp 's|image: land007/webclaw:.*|image: '"${COMMIT_IMAGE_NAME}"'|g' docker-compose.yml; then
         rm -f docker-compose.yml.tmp
         log "Docker Compose updated to use snapshot image"
     else
         # For macOS sed (no -i)
-        sed 's|image: land007/webcode:.*|image: '"${COMMIT_IMAGE_NAME}"'|g' docker-compose.yml > docker-compose.yml.tmp
+        sed 's|image: land007/webclaw:.*|image: '"${COMMIT_IMAGE_NAME}"'|g' docker-compose.yml > docker-compose.yml.tmp
         mv docker-compose.yml.tmp docker-compose.yml
         log "Docker Compose updated to use snapshot image"
     fi
@@ -232,7 +232,7 @@ log "Snapshot restored successfully!"
 log "Snapshot: ${SNAPSHOT_NAME}"
 log "Container is now running with snapshot data"
 info "Note: The container is using the original docker-compose.yml configuration"
-info "      Future restarts will use the standard land007/webcode:latest image"
+info "      Future restarts will use the standard land007/webclaw:latest image"
 
 # Display restore summary
 info "Restore summary:"
