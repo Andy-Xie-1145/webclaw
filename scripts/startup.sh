@@ -178,7 +178,7 @@ export ENABLE_FUSE="${ENABLE_FUSE:-false}"
 
 # ─── Mode selection ─────────────────────────────────────────────────
 if [ "$MODE" = "lite" ]; then
-    echo "[startup] Lite mode: starting Theia + Vibe Kanban only (no VNC desktop)"
+    echo "[startup] Lite mode: starting code-server + OpenClaw only (no VNC desktop)"
     exec /usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord-lite.conf
 else
     echo "[startup] Desktop mode: starting full GNOME desktop + all services"

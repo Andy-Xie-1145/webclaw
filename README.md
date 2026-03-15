@@ -337,7 +337,7 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 | Feature | Full Version | Lite Version |
 |---------|--------------|--------------|
 | Theia IDE | ✅ | ✅ |
-| Vibe Kanban | ✅ | ✅ |
+| Vibe Kanban | ✅ | ❌ |
 | OpenClaw AI | ✅ | ✅ |
 | Dashboard Proxy | ✅ | ✅ |
 | GNOME Desktop | ✅ | ❌ |
@@ -356,7 +356,7 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 docker compose up -d
 ```
 
-**Lite mode** — Only Theia + Vibe Kanban + OpenClaw, no desktop (lower resource usage):
+**Lite mode** — Only Theia + OpenClaw, no desktop (lower resource usage):
 ```bash
 MODE=lite docker compose up -d
 ```
@@ -722,7 +722,7 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 
 ### 构建精简版（无桌面）
 
-**精简版**仅包含 Theia IDE、Vibe Kanban、OpenClaw 和 Dashboard 代理，不包含 VNC、桌面环境和浏览器。
+**精简版**仅包含 Theia IDE、OpenClaw 和 Dashboard 代理，不包含 VNC、桌面环境、Kanban 和浏览器。
 
 ```bash
 # 克隆仓库
@@ -742,7 +742,7 @@ docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,lin
 | 功能 | 完整版 | 精简版 |
 |------|--------|--------|
 | Theia IDE | ✅ | ✅ |
-| Vibe Kanban | ✅ | ✅ |
+| Vibe Kanban | ✅ | ❌ |
 | OpenClaw AI | ✅ | ✅ |
 | Dashboard 代理 | ✅ | ✅ |
 | GNOME 桌面 | ✅ | ❌ |
@@ -761,7 +761,7 @@ docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,lin
 docker compose up -d
 ```
 
-**Lite 模式** — 仅运行 Theia + Vibe Kanban + OpenClaw，无桌面，资源占用更小：
+**Lite 模式** — 仅运行 Theia + OpenClaw，无桌面，资源占用更小：
 ```bash
 MODE=lite docker compose up -d
 ```

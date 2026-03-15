@@ -192,10 +192,8 @@ RUN if [ "$INSTALL_DESKTOP" = "true" ]; then \
 # ─── 12. Config files (COPY last — most likely to change) ───────────
 COPY configs/supervisord.conf /etc/supervisor/supervisord.conf
 COPY configs/supervisord-lite.conf /etc/supervisor/conf.d/supervisord-lite.conf
-COPY configs/supervisor-vibe-kanban.conf /etc/supervisor/conf.d/supervisor-vibe-kanban.conf
 COPY configs/supervisor-code-server.conf /etc/supervisor/conf.d/supervisor-code-server.conf
 COPY configs/supervisor-openclaw.conf /etc/supervisor/conf.d/supervisor-openclaw.conf
-COPY configs/supervisor-claudecodeui.conf /etc/supervisor/conf.d/supervisor-claudecodeui.conf
 COPY configs/supervisor-webtty.conf /etc/supervisor/conf.d/supervisor-webtty.conf
 COPY configs/supervisor-cloudflared.conf /etc/supervisor/conf.d/supervisor-cloudflared.conf
 COPY configs/supervisor-analytics.conf /etc/supervisor/conf.d/supervisor-analytics.conf
@@ -264,5 +262,5 @@ ENV VNC_RESOLUTION=1920x1080
 
 ENTRYPOINT ["/opt/startup.sh"]
 
-#docker build --build-arg INSTALL_DESKTOP=false -t land007/webclaw_let:latest .
+#docker build --build-arg INSTALL_DESKTOP=false -t land007/webclaw_lite:latest .
 #docker build --build-arg INSTALL_DESKTOP=true -t land007/webclaw:latest .

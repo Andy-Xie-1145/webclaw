@@ -24,7 +24,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Start with desktop mode (default)
 docker compose up -d
 
-# Start with lite mode (no VNC desktop, just Theia + Vibe Kanban)
+# Start with lite mode (no VNC desktop, just Theia + OpenClaw)
 MODE=lite docker compose up -d
 
 # Custom VNC password and resolution
@@ -96,8 +96,8 @@ docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,lin
 12. **Config files** — copied last so most changes don't bust Theia cache
 
 ### Startup Modes (`scripts/startup.sh`)
-- **desktop mode**: Runs full GNOME session via `supervisord.conf` (includes xvnc, desktop, novnc, theia, vibe-kanban, openclaw, dashboard)
-- **lite mode**: Runs only Theia + Vibe Kanban + OpenClaw + Dashboard via `supervisord-lite.conf` (no VNC/desktop overhead)
+- **desktop mode**: Runs full GNOME session via `supervisord.conf` (includes xvnc, desktop, novnc, theia/code-server, openclaw, dashboard)
+- **lite mode**: Runs only Theia/code-server + OpenClaw + Dashboard via `supervisord-lite.conf` (no VNC/desktop overhead)
 
 ### Authentication Architecture
 The dashboard-server.js Node.js process acts as a unified authentication and proxy gateway:
