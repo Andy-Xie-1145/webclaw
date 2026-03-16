@@ -319,3 +319,60 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/openclaw_lite
           readme-filepath: ./README-openclaw-lite.md
+
+  # ─────────────────────────────────────────────────────────────
+  # Job: Export images to tar.gz and upload to Cloudflare R2
+  # ─────────────────────────────────────────────────────────────
+  export-to-r2:
+    needs: [build-full, build-lite]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install AWS CLI
+        run: |
+          pip install --quiet awscli
+
+      - name: Export webclaw_lite (amd64) to tar.gz
+        run: |
+          docker pull --platform linux/amd64 ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite:latest
+          docker save ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite:latest \
+            | gzip > webclaw_lite-amd64-${{ github.sha }}.tar.gz
+
+      - name: Export webclaw (full, amd64) to tar.gz
+        run: |
+          docker pull --platform linux/amd64 ${{ secrets.DOCKERHUB_USERNAME }}/webclaw:latest
+          docker save ${{ secrets.DOCKERHUB_USERNAME }}/webclaw:latest \
+            | gzip > webclaw-amd64-${{ github.sha }}.tar.gz
+
+      - name: Upload to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          # 上传带 sha 的版本（永久保存）
+          aws s3 cp webclaw_lite-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw_lite-amd64-${{ github.sha }}.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
+
+          aws s3 cp webclaw-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw-amd64-${{ github.sha }}.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
+
+          # 同时覆盖 latest 版本（方便直接下载最新）
+          aws s3 cp webclaw_lite-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw_lite-amd64-latest.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
+
+          aws s3 cp webclaw-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw-amd64-latest.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
