@@ -185,8 +185,10 @@ else
 
     # VNC password setup
     mkdir -p /home/ubuntu/.vnc
-    VNC_PASS="${PASSWORD:-$(openssl rand -base64 8)}"
-    if [ -z "$PASSWORD" ]; then
+    # Prefer the documented/runtime-managed VNC_PASSWORD variable.
+    # Keep PASSWORD as a backward-compatible fallback for older compose files.
+    VNC_PASS="${VNC_PASSWORD:-${PASSWORD:-$(openssl rand -base64 8)}}"
+    if [ -z "$VNC_PASSWORD" ] && [ -z "$PASSWORD" ]; then
         echo "[startup] Generated VNC password: $VNC_PASS"
     fi
 
