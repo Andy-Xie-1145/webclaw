@@ -44,7 +44,7 @@
 
 ### 修改文件（3 个）
 
-1. **`configs/dashboard-server.js`**
+1. **`webclaw-dashboard-server` 包内的 dashboard server 源码**
    - 新增 API 端点：
      - `GET /api/snapshot/list` - 列出所有快照
      - `POST /api/snapshot/create` - 创建快照
@@ -53,7 +53,7 @@
      - `GET /api/snapshot/base-images` - 列出基础镜像
      - `POST /api/snapshot/cleanup` - 清理未使用的基础镜像
 
-2. **`configs/dashboard.html`**
+2. **`webclaw-dashboard-server` 包内的 dashboard HTML**
    - 更新备份面板 UI：
      - 添加"完整快照"和"日常备份"标签页
      - 显示快照元数据（基础镜像 ID、层大小、volumes 大小）

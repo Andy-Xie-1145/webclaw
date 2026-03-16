@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Port Architecture:**
 - **10001-10006**: Internal application ports (actual app listeners)
-- **20001-20004**: External access ports via dashboard-server.js proxy (with Basic Auth)
+- **20001-20004**: External access ports via `webclaw-dashboard-server` proxy (with Basic Auth)
 - **11001-11004**: Launcher proxy ports (desktop app internal use, no auth)
 
 ## Running the Environment
@@ -100,7 +100,7 @@ docker buildx build --build-arg INSTALL_DESKTOP=false --platform linux/amd64,lin
 - **lite mode**: Runs only Theia/code-server + OpenClaw + Dashboard via `supervisord-lite.conf` (no VNC/desktop overhead)
 
 ### Authentication Architecture
-The dashboard-server.js Node.js process acts as a unified authentication and proxy gateway:
+The `webclaw-dashboard-server` Node.js process acts as a unified authentication and proxy gateway:
 - **Port 20000**: Dashboard UI with Basic Auth
 - **Port 20001**: Theia IDE proxy (Basic Auth → 127.0.0.1:10001)
 - **Port 20002**: Vibe Kanban proxy (Basic Auth → 127.0.0.1:10002)
@@ -118,7 +118,7 @@ Internal services bind to `127.0.0.1` only. The dashboard proxy listens on `0.0.
 | `configs/supervisor-theia.conf` | Theia process (port 10001, serves `/home/ubuntu/projects`) |
 | `configs/supervisor-vibe-kanban.conf` | Vibe Kanban process (port 10002) |
 | `configs/supervisor-openclaw.conf` | OpenClaw gateway process (port 10003, launched via npx) |
-| `configs/dashboard-server.js` | Dashboard + proxy server (ports 20000-20004, handles Basic Auth) |
+| `webclaw-dashboard-server@1.4.3` | Dashboard + proxy server package (ports 20000-20004, handles Basic Auth) |
 | `configs/supervisor-dashboard.conf` | Dashboard process configuration |
 | `configs/supervisord.conf` | Main supervisor config, includes noVNC (port 10004) and TigerVNC (port 10005) |
 | `configs/xsession` | GNOME Flashback session startup script |
@@ -195,7 +195,7 @@ When creating commits, follow these guidelines:
 Examples:
 ```
 新增: 添加 code-server 中文语言包支持
-修复: 解决 dashboard-server.js 代理跨域问题
+修复: 解决 dashboard server 代理跨域问题
 优化: 缩小 Docker 镜像大小，移除不必要的依赖
 配置: 更新 docker-compose.yml 端口映射
 ```

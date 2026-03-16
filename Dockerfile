@@ -211,6 +211,7 @@ COPY configs/key-remap.js /tmp/
 COPY configs/xsession /tmp/
 COPY scripts/audio-ws-server.py /tmp/
 COPY scripts/audio-ws-wrapper.sh /tmp/
+COPY scripts/start-dashboard.sh /opt/start-dashboard.sh
 COPY scripts/start-webtty.sh /opt/start-webtty.sh
 COPY configs/desktop-shortcuts/ /tmp/desktop-shortcuts/
 COPY scripts/patch-novnc.sh /tmp/patch-novnc.sh
@@ -229,7 +230,9 @@ RUN if [ "$INSTALL_DESKTOP" = "true" ]; then \
         && cp /tmp/audio-ws-wrapper.sh /opt/ \
         && chmod +x /opt/audio-ws-server.py /opt/audio-ws-wrapper.sh; \
     fi \
-    && chmod +x /opt/start-webtty.sh \
+    && mkdir -p /opt/dashboard-override \
+    && chown -R ubuntu:ubuntu /opt/dashboard-override \
+    && chmod +x /opt/start-dashboard.sh /opt/start-webtty.sh \
     && rm -rf /tmp/supervisor-audio.conf /tmp/audio-player.html /tmp/audio-bar.js \
            /tmp/touch-handler.js /tmp/key-remap.js /tmp/xsession /tmp/desktop-shortcuts/ \
            /tmp/audio-ws-server.py /tmp/audio-ws-wrapper.sh \
