@@ -213,6 +213,7 @@ COPY scripts/audio-ws-server.py /tmp/
 COPY scripts/audio-ws-wrapper.sh /tmp/
 COPY scripts/start-dashboard.sh /opt/start-dashboard.sh
 COPY scripts/start-webtty.sh /opt/start-webtty.sh
+COPY scripts/start-openclaw.sh /opt/start-openclaw.sh
 COPY configs/desktop-shortcuts/ /tmp/desktop-shortcuts/
 COPY scripts/patch-novnc.sh /tmp/patch-novnc.sh
 RUN if [ "$INSTALL_DESKTOP" = "true" ]; then \
@@ -232,7 +233,7 @@ RUN if [ "$INSTALL_DESKTOP" = "true" ]; then \
     fi \
     && mkdir -p /opt/dashboard-override \
     && chown -R ubuntu:ubuntu /opt/dashboard-override \
-    && chmod +x /opt/start-dashboard.sh /opt/start-webtty.sh \
+    && chmod +x /opt/start-dashboard.sh /opt/start-webtty.sh /opt/start-openclaw.sh \
     && rm -rf /tmp/supervisor-audio.conf /tmp/audio-player.html /tmp/audio-bar.js \
            /tmp/touch-handler.js /tmp/key-remap.js /tmp/xsession /tmp/desktop-shortcuts/ \
            /tmp/audio-ws-server.py /tmp/audio-ws-wrapper.sh \
