@@ -8,7 +8,7 @@ on:
 
 jobs:
   # ─────────────────────────────────────────────────────────────
-  # Job 1: Build base Code Server image (slow, but cached)
+  # Job 1: Build base image (slow, but cached)
   # ─────────────────────────────────────────────────────────────
   build-base:
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push base Code Server image
+      - name: Build and push base image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -71,9 +71,9 @@ jobs:
             type=image,push=true,annotation-index.org.opencontainers.image.description=Base Code Server IDE image with Supervisor (no desktop)
 
   # ─────────────────────────────────────────────────────────────
-  # Job 2: Build FULL version (depends on base)
+  # Job 2: Build desktop version (with GNOME desktop, depends on base)
   # ─────────────────────────────────────────────────────────────
-  build-full:
+  build-desktop:
     needs: build-base
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -99,15 +99,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Metadata for FULL version
       - uses: docker/metadata-action@v5
         id: meta-full
         with:
           images: |
             ${{ secrets.DOCKERHUB_USERNAME }}/webclaw
             ghcr.io/${{ github.repository }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/openclaw
-            ghcr.io/${{ github.repository_owner }}/openclaw
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=semver,pattern={{version}}
@@ -133,94 +130,7 @@ jobs:
             type=image,push=true,annotation-index.org.opencontainers.image.description=Full image with GNOME desktop and VNC
 
   # ─────────────────────────────────────────────────────────────
-  # Job: Build FULL version with additional AI CLIs
-  # ─────────────────────────────────────────────────────────────
-  build-full-clis:
-    needs: build-full
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: docker/setup-qemu-action@v3
-
-      - uses: docker/setup-buildx-action@v3
-
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push webclaw_full image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile.full
-          platforms: linux/amd64,linux/arm64
-          push: true
-          build-args: |
-            BASE_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/webclaw:${{ github.sha }}
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/webclaw_full:latest
-            ghcr.io/${{ github.repository_owner }}/webclaw_full:${{ github.sha }}
-          labels: |
-            org.opencontainers.image.description=Full image with 4 AI CLIs (Claude + Gemini + Codex + Cursor)
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  # ─────────────────────────────────────────────────────────────
-  # Job 4: Update Docker Hub description for full version
-  # ─────────────────────────────────────────────────────────────
-  update-description-full:
-    needs: build-full
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/webclaw
-          readme-filepath: ./README.md
-
-  # ─────────────────────────────────────────────────────────────
-  # Job: Update Docker Hub description for openclaw (full version)
-  # ─────────────────────────────────────────────────────────────
-  update-description-openclaw:
-    needs: build-full
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate openclaw README
-        run: |
-          sed 's|land007/webclaw_lite|land007/openclaw_lite|g; s|land007/webclaw|land007/openclaw|g' README.md > README-openclaw.md
-      - uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/openclaw
-          readme-filepath: ./README-openclaw.md
-
-  # ─────────────────────────────────────────────────────────────
-  # Job 3: Build LITE version (parallel with full, depends on base)
+  # Job 3: Build lite version (no desktop, parallel with full)
   # ─────────────────────────────────────────────────────────────
   build-lite:
     needs: build-base
@@ -248,15 +158,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Metadata for LITE version
       - uses: docker/metadata-action@v5
         id: meta-lite
         with:
           images: |
             ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite
             ghcr.io/${{ github.repository_owner }}/webclaw_lite
-            ${{ secrets.DOCKERHUB_USERNAME }}/openclaw_lite
-            ghcr.io/${{ github.repository_owner }}/openclaw_lite
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=semver,pattern={{version}}
@@ -282,9 +189,152 @@ jobs:
             type=image,push=true,annotation-index.org.opencontainers.image.description=Lite image without desktop (fast startup)
 
   # ─────────────────────────────────────────────────────────────
-  # Job 5: Update Docker Hub description for lite version
+  # Job 4: Build full version (desktop + 4 AI CLIs)
   # ─────────────────────────────────────────────────────────────
-  update-description-lite:
+  build-full:
+    needs: build-desktop
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push full+clis image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile.full
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: |
+            BASE_IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/webclaw:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/webclaw_full:latest
+            ghcr.io/${{ github.repository_owner }}/webclaw_full:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.description=Full image with 4 AI CLIs (Claude + Gemini + Codex + Cursor)
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ─────────────────────────────────────────────────────────────
+  # After build-desktop: update openclaw README + export desktop image to R2
+  # ─────────────────────────────────────────────────────────────
+  export-desktop-to-r2:
+    needs: build-desktop
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install AWS CLI
+        run: pip install --quiet awscli
+
+      - name: Export webclaw (desktop, amd64) to tar.gz
+        run: |
+          docker pull --platform linux/amd64 ${{ secrets.DOCKERHUB_USERNAME }}/webclaw:latest
+          docker save ${{ secrets.DOCKERHUB_USERNAME }}/webclaw:latest \
+            | gzip > webclaw-amd64-${{ github.sha }}.tar.gz
+
+      - name: Upload to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          aws s3 cp webclaw-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw-amd64-${{ github.sha }}.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
+
+          aws s3 cp webclaw-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw-amd64-latest.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
+
+  # ─────────────────────────────────────────────────────────────
+  # After build-full: update webclaw README + export full image to R2
+  # ─────────────────────────────────────────────────────────────
+  update-readme-full:
+    needs: build-full
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/webclaw
+          readme-filepath: ./README.md
+
+  export-full-to-r2:
+    needs: build-full
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install AWS CLI
+        run: pip install --quiet awscli
+
+      - name: Export webclaw_full (desktop + CLIs, amd64) to tar.gz
+        run: |
+          docker pull --platform linux/amd64 ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:latest
+          docker save ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_full:latest \
+            | gzip > webclaw_full-amd64-${{ github.sha }}.tar.gz
+
+      - name: Upload to Cloudflare R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          aws s3 cp webclaw_full-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw_full-amd64-${{ github.sha }}.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
+
+          aws s3 cp webclaw_full-amd64-${{ github.sha }}.tar.gz \
+            s3://${R2_BUCKET}/webclaw_full-amd64-latest.tar.gz \
+            --endpoint-url ${R2_ENDPOINT}
+
+  # ─────────────────────────────────────────────────────────────
+  # After build-lite: update Docker Hub READMEs + export lite to R2
+  # ─────────────────────────────────────────────────────────────
+  update-readme-lite:
     needs: build-lite
     runs-on: ubuntu-latest
     permissions:
@@ -299,32 +349,8 @@ jobs:
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite
           readme-filepath: ./README.md
 
-  # ─────────────────────────────────────────────────────────────
-  # Job: Update Docker Hub description for openclaw_lite
-  # ─────────────────────────────────────────────────────────────
-  update-description-openclaw-lite:
+  export-lite-to-r2:
     needs: build-lite
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate openclaw_lite README
-        run: |
-          sed 's|land007/webclaw_lite|land007/openclaw_lite|g; s|land007/webclaw|land007/openclaw|g' README.md > README-openclaw-lite.md
-      - uses: peter-evans/dockerhub-description@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/openclaw_lite
-          readme-filepath: ./README-openclaw-lite.md
-
-  # ─────────────────────────────────────────────────────────────
-  # Job: Export images to tar.gz and upload to Cloudflare R2
-  # ─────────────────────────────────────────────────────────────
-  export-to-r2:
-    needs: [build-full, build-lite]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -336,20 +362,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Install AWS CLI
-        run: |
-          pip install --quiet awscli
+        run: pip install --quiet awscli
 
       - name: Export webclaw_lite (amd64) to tar.gz
         run: |
           docker pull --platform linux/amd64 ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite:latest
           docker save ${{ secrets.DOCKERHUB_USERNAME }}/webclaw_lite:latest \
             | gzip > webclaw_lite-amd64-${{ github.sha }}.tar.gz
-
-      - name: Export webclaw (full, amd64) to tar.gz
-        run: |
-          docker pull --platform linux/amd64 ${{ secrets.DOCKERHUB_USERNAME }}/webclaw:latest
-          docker save ${{ secrets.DOCKERHUB_USERNAME }}/webclaw:latest \
-            | gzip > webclaw-amd64-${{ github.sha }}.tar.gz
 
       - name: Upload to Cloudflare R2
         env:
@@ -359,20 +378,10 @@ jobs:
           R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
-          # 上传带 sha 的版本（永久保存）
           aws s3 cp webclaw_lite-amd64-${{ github.sha }}.tar.gz \
             s3://${R2_BUCKET}/webclaw_lite-amd64-${{ github.sha }}.tar.gz \
             --endpoint-url ${R2_ENDPOINT}
 
-          aws s3 cp webclaw-amd64-${{ github.sha }}.tar.gz \
-            s3://${R2_BUCKET}/webclaw-amd64-${{ github.sha }}.tar.gz \
-            --endpoint-url ${R2_ENDPOINT}
-
-          # 同时覆盖 latest 版本（方便直接下载最新）
           aws s3 cp webclaw_lite-amd64-${{ github.sha }}.tar.gz \
             s3://${R2_BUCKET}/webclaw_lite-amd64-latest.tar.gz \
-            --endpoint-url ${R2_ENDPOINT}
-
-          aws s3 cp webclaw-amd64-${{ github.sha }}.tar.gz \
-            s3://${R2_BUCKET}/webclaw-amd64-latest.tar.gz \
             --endpoint-url ${R2_ENDPOINT}
