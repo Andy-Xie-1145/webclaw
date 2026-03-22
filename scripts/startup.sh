@@ -91,20 +91,33 @@ chown -R ubuntu:ubuntu /home/ubuntu/.openclaw
 #   2. gateway.controlUi.dangerouslyDisableDeviceAuth = true
 #      (disable browser device-pairing; token auth is sufficient in a container)
 #   3. gateway.controlUi.allowInsecureAuth = true  (allow HTTP, not just HTTPS)
+#   4. browser.noSandbox = true and tools.alsoAllow includes browser
+#      (OpenClaw browser control needs Chromium no-sandbox in the container and
+#       the browser tool must be exposed in addition to the coding profile)
 OPENCLAW_JSON="/home/ubuntu/.openclaw/openclaw.json"
 if [ -f "$OPENCLAW_JSON" ]; then
     # Patch existing config (written by openclaw onboard)
     PATCHED=$(jq '
         .gateway.port = 10003 |
         .gateway.controlUi.dangerouslyDisableDeviceAuth = true |
-        .gateway.controlUi.allowInsecureAuth = true
+        .gateway.controlUi.allowInsecureAuth = true |
+        .browser.noSandbox = true |
+        .tools.profile = (.tools.profile // "coding") |
+        .tools.alsoAllow = (((.tools.alsoAllow // []) + ["browser"]) | unique)
     ' "$OPENCLAW_JSON") && echo "$PATCHED" > "$OPENCLAW_JSON" \
-        && echo "[startup] OpenClaw config patched (port=10003, dangerouslyDisableDeviceAuth=true)" \
+        && echo "[startup] OpenClaw config patched (port=10003, browser enabled in coding profile)" \
         || echo "[startup] WARNING: Failed to patch OpenClaw config"
 else
     # First-ever run before onboard: write a minimal bootstrap config
     cat > "$OPENCLAW_JSON" <<'EOF'
 {
+  "browser": {
+    "noSandbox": true
+  },
+  "tools": {
+    "profile": "coding",
+    "alsoAllow": ["browser"]
+  },
   "gateway": {
     "port": 10003,
     "mode": "local",
